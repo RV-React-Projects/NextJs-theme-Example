@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+### Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/theme-toggle.git
+cd theme-toggle
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install Dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+bun install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Run the Project
 
-## Learn More
+```bash
+bun run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+To set up a custom theme toggle in your Next.js project without any external library, follow these steps:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Create a Theme Context:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Create a `ThemeContext.tsx` file in your project (e.g., inside a `context` folder):
 
-## Deploy on Vercel
+   ```tsx
+   // context/ThemeContext.tsx
+   import React, {
+     createContext,
+     useContext,
+     useState,
+     useEffect,
+   } from "react";
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   type Theme = "light" | "dark";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   interface ThemeContextProps {
+     theme: Theme;
+     toggleTheme: () => void;
+   }
+
+   const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+
+   export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+     children,
+   }) => {
+     const [theme, setTheme] = useState<Theme>("light");
+
+     useEffect(() => {
+       const storedTheme = localStorage.getItem("theme") as Theme;
+       if (storedTheme) setTheme(storedTheme);
+     }, []);
+
+     useEffect(() => {
+       document.documentElement.setAttribute("data-theme", theme);
+       localStorage.setItem("theme", theme);
+     }, [theme]);
+
+     const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
+     return (
+       <ThemeContext.Provider value={{ theme, toggleTheme }}>
+         {children}
+       </ThemeContext.Provider>
+     );
+   };
+
+   export const useTheme = () => {
+     const context = useContext(ThemeContext);
+     if (!context)
+       throw new Error("useTheme must be used within ThemeProvider");
+     return context;
+   };
+   ```
+
+2. **Update `global.css`:**
+
+   Define your theme variables in `styles/global.css`:
+
+   ```css
+   :root {
+     --background: #fff;
+     --text: #111;
+   }
+
+   [data-theme="dark"] {
+     --background: #111;
+     --text: #fff;
+   }
+
+   body {
+     background: var(--background);
+     color: var(--text);
+     transition:
+       background 0.2s,
+       color 0.2s;
+   }
+   ```
+
+3. **Wrap your app with ThemeProvider:**
+
+   In `app/layout.tsx` or `_app.tsx`:
+
+   ```tsx
+   import { ThemeProvider } from "../context/ThemeContext";
+   import "../styles/global.css";
+
+   export default function RootLayout({ children }) {
+     return <ThemeProvider>{children}</ThemeProvider>;
+   }
+   ```
+
+4. **Add a Theme Toggle Button:**
+
+   Use the context in your components:
+
+   ```tsx
+   import { useTheme } from "../context/ThemeContext";
+
+   export default function ThemeToggle() {
+     const { theme, toggleTheme } = useTheme();
+     return (
+       <button onClick={toggleTheme}>
+         Switch to {theme === "light" ? "dark" : "light"} mode
+       </button>
+     );
+   }
+   ```
+
+Now your Next.js app supports theme toggling without any external library!
+
+/**
+ * Sets a custom attribute (commonly named 'data-theme') on the root HTML element to apply a theme.
+ * 
+ * Note: The attribute name 'data-theme' is just a convention; you can use any name or even set an attribute without a name directly, e.g.:
+ * 
+ *   document.documentElement.setAttribute(theme)
+ * 
+ * This approach allows dynamic switching of themes by updating the attribute value.
+ */
