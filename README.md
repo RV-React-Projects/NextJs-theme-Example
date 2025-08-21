@@ -4,7 +4,7 @@
 
 ```bash
 git clone https://github.com/RV-React-Projects/NextJs-theme-Example.git
-cd theme-toggle
+cd NextJs-theme-Example
 ```
 
 ### Install Dependencies
