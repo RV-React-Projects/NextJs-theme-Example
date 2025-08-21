@@ -16,7 +16,7 @@ bun install
 ### Run the Project
 
 ```bash
-bun run start
+bun run dev
 ```
 
 To set up a custom theme toggle in your Next.js project without any external library, follow these steps:
