@@ -3,7 +3,7 @@
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/theme-toggle.git
+git clone https://github.com/RV-React-Projects/NextJs-theme-Example.git
 cd theme-toggle
 ```
 
@@ -131,12 +131,13 @@ To set up a custom theme toggle in your Next.js project without any external lib
 
 Now your Next.js app supports theme toggling without any external library!
 
-/**
- * Sets a custom attribute (commonly named 'data-theme') on the root HTML element to apply a theme.
- * 
- * Note: The attribute name 'data-theme' is just a convention; you can use any name or even set an attribute without a name directly, e.g.:
- * 
- *   document.documentElement.setAttribute(theme)
- * 
- * This approach allows dynamic switching of themes by updating the attribute value.
- */
+/\*\*
+
+- Sets a custom attribute (commonly named 'data-theme') on the root HTML element to apply a theme.
+-
+- Note: The attribute name 'data-theme' is just a convention; you can use any name or even set an attribute without a name directly, e.g.:
+-
+- document.documentElement.setAttribute(theme)
+-
+- This approach allows dynamic switching of themes by updating the attribute value.
+  \*/
