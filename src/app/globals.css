@@ -12,11 +12,24 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+[mode="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+[mode="tomato"] {
+  --background: tomato;
+  --foreground: #171717;
+}
+
+[mode="grass"] {
+  --background: #00ff99;
+  --foreground: #003300;
 }
 
 body {
